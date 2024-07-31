@@ -30,21 +30,35 @@ public class ArithmeticPresentationLayer {
     private Multiplier multiplier;
     private Squarer squarer;
 
+    // Constructor Injection
+    @Autowired
+    public ArithmeticPresentationLayer(Adder adder, Multiplier multiplier, Squarer squarer) {
+        this.adder = adder;
+        this.multiplier = multiplier;
+        this.squarer = squarer;
+    }
+
+    // Setter Injection
+    @Autowired
     public void setMultiplier(Multiplier multiplier) {
         this.multiplier = multiplier;
     }
 
-    public ArithmeticPresentationLayer(Squarer squarer) {
-        this.squarer = squarer;
-    }
+    // Field Injection (no additional Adder field here as it was redundant)
+    // The constructor already injects Adder, so field injection for Adder is not needed
 
     public static void main(String[] args) {
         // Use this main method for manual testing (optional)
         // Create the Spring container
-        ApplicationContext context =  new AnnotationConfigApplicationContext(ArithmeticPresentationLayer.class);
+        ApplicationContext context = new AnnotationConfigApplicationContext(ArithmeticPresentationLayer.class);
 
-        // Retrieve the RoryApplication bean from the container
+        // Retrieve the ArithmeticPresentationLayer bean from the container
         ArithmeticPresentationLayer app = context.getBean(ArithmeticPresentationLayer.class);
+
+        // Example usage
+        System.out.println(app.addConvertToString(3, 5));
+        System.out.println(app.multiplyConvertToString(3, 5));
+        System.out.println(app.squareConvertToString(3));
     }
 
     /**
@@ -53,15 +67,16 @@ public class ArithmeticPresentationLayer {
      * @return the addition operation as a String, see tests for specific formatting
      */
     public String addConvertToString(double a, double b){
-        return String.format("The result of %.1f + %.1f is %.1f", a, b, adder.add(a,b));
+        return String.format("The result of %.1f + %.1f is %.1f", a, b, adder.add(a, b));
     }
+
     /**
      * @param a - number 1
      * @param b - number 2
      * @return the multiplication operation as a String, see tests for specific formatting
      */
     public String multiplyConvertToString(double a, double b){
-        return String.format("The result of %.1f * %.1f is %.1f", a, b, multiplier.multiply(a,b));
+        return String.format("The result of %.1f * %.1f is %.1f", a, b, multiplier.multiply(a, b));
     }
 
     /**
